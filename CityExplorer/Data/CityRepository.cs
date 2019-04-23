@@ -44,5 +44,29 @@ namespace CityExplorer.Data
         {
             context.Remove(entity);
         }
+
+        public async Task<Activity[]> GetAllActivitiesAsync()
+        {
+            IQueryable<Activity> query = context.Activities;
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Activity> GetActivityAsync(string name)
+        {
+            IQueryable<Activity> query = context.Activities.Where(a => a.Name == name);
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<Venue[]> GetAllVenuesAsync()
+        {
+            IQueryable<Venue> query = context.Venues;
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Venue> GetVenueAsync(string name)
+        {
+            IQueryable<Venue> query = context.Venues.Where(v => v.Name == name);
+            return await query.FirstOrDefaultAsync();
+        }
     }
 }
