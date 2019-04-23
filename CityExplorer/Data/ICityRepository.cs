@@ -9,8 +9,13 @@ namespace CityExplorer.Data
 {
     public interface ICityRepository
     {
+        // General
+        void Add<T>(T entity) where T : class;
+        Task<bool> SaveChangesAsync();
+        void Delete<T>(T entity) where T : class;
+
         // Cities
         Task<City[]> GetAllCitiesAsync();
-        Task<City> GetCityAsync(string name);
+        Task<City> GetCityAsync(int CityId);
     }
 }

@@ -24,10 +24,25 @@ namespace CityExplorer.Data
             return await query.ToArrayAsync();
         }
 
-        public async Task<City> GetCityAsync(string name)
+        public async Task<City> GetCityAsync(int cityId)
         {
-            IQueryable<City> query = context.Cities.Where(c => c.Name == name);
+            IQueryable<City> query = context.Cities.Where(c => c.CityId == cityId);
             return await query.FirstOrDefaultAsync();
+        }
+
+        public void Add<T>(T entity) where T : class
+        {
+            context.Add(entity);
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return (await context.SaveChangesAsync()) > 0;
+        }
+
+        public void Delete<T>(T entity) where T : class
+        {
+            context.Remove(entity);
         }
     }
 }
