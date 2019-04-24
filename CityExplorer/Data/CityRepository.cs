@@ -94,5 +94,12 @@ namespace CityExplorer.Data
 
             return await query.FirstOrDefaultAsync();
         }
+
+        public async Task<Venue[]> GetVenuesByActivityAsync(string activityName)
+        {
+            IQueryable<Venue> query = context.Venues.Where();
+
+            return await query.FirstOrDefaultAsync();
+        }
     }
 }

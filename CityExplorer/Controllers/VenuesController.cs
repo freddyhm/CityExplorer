@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace CityExplorer.Controllers
 {
     [Route("api/cities/{cityName}/activities/{activityName}/venues")]
+    [Route("api/[controller]")]
     [ApiController]
     public class VenuesController : ControllerBase
     {
@@ -22,11 +23,19 @@ namespace CityExplorer.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult> Get(string cityName)
         {
             try
             {
-                var results = await repository.GetAllVenuesAsync();
+                if (activityName == null)
+                {
+                    var results = await repository.GetAllVenuesAsync();
+                }
+                else
+                {
+                    var results = await repository.GetVenuesByActivityAsync();
+                }
+
                 return Ok(results);
             }
             catch (Exception)
