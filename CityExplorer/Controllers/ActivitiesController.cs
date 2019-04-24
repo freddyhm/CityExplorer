@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace CityExplorer.Controllers
 {
-    [Route("api/cities/{cityName}/[controller]")]
     [Route("api/[controller]")]
+    [Route("api/cities/{cityName}/[controller]")]
     [ApiController]
     public class ActivitiesController : ControllerBase
     {

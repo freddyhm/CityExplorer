@@ -97,9 +97,9 @@ namespace CityExplorer.Data
 
         public async Task<Venue[]> GetVenuesByActivityAsync(string activityName)
         {
-            IQueryable<Venue> query = context.Venues.Where();
+            IQueryable<Venue> query = context.Venues.Where(v => v.ActivityVenues.Any(a => a.Activity.Name == activityName));
 
-            return await query.FirstOrDefaultAsync();
+            return await query.ToArrayAsync();
         }
     }
 }

@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace CityExplorer.Controllers
 {
-    [Route("api/cities/{cityName}/activities/{activityName}/venues")]
     [Route("api/[controller]")]
+    [Route("api/cities/{cityName}/activities/{activityName}/[controller]")]
     [ApiController]
     public class VenuesController : ControllerBase
     {
@@ -23,20 +23,20 @@ namespace CityExplorer.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Get(string cityName)
+        public async Task<ActionResult> Get(string activityName = null, string cityName = null)
         {
             try
             {
-                if (activityName == null)
+                if (activityName != null && cityName != null)
                 {
-                    var results = await repository.GetAllVenuesAsync();
+                    var results = await repository.GetVenuesByActivityAsync(activityName);
+                    return Ok(results);
                 }
                 else
                 {
-                    var results = await repository.GetVenuesByActivityAsync();
+                    var results = await repository.GetAllVenuesAsync();
+                    return Ok(results);
                 }
-
-                return Ok(results);
             }
             catch (Exception)
             {
@@ -44,16 +44,12 @@ namespace CityExplorer.Controllers
             }
         }
 
-        [HttpGet("{name}")]
-        public async Task<ActionResult> Get(string name)
+        [HttpGet("{venueName}")]
+        public async Task<ActionResult> Get(string venueName)
         {
             try
             {
-                var results = await repository.GetVenueAsync(name);
-
-                if (results == null)
-                    return NotFound();
-
+                var results = await repository.GetVenueAsync(venueName);
                 return Ok(results);
             }
             catch (Exception)

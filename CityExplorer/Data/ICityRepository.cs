@@ -26,7 +26,7 @@ namespace CityExplorer.Data
 
         // Venues
         Task<Venue[]> GetAllVenuesAsync();
-        Task<Venue[]> GetVenuesByActivityAsync();
+        Task<Venue[]> GetVenuesByActivityAsync(string activityName);
         Task<Venue> GetVenueAsync(string name);
         Task<Venue> GetVenueAsync(int id);
 
