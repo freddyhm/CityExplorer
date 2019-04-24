@@ -17,6 +17,7 @@ namespace CityExplorer.Data
         // Cities
         Task<City[]> GetAllCitiesAsync();
         Task<City> GetCityAsync(int CityId);
+        Task<City> GetCityAsync(string cityName);
 
         // Activities
         Task<Activity[]> GetAllActivitiesAsync();

@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace CityExplorer.Controllers
 {
-    [Route("api/cities/{activityName}/[controller]")]
+    [Route("api/cities/{cityName}/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ActivitiesController : ControllerBase
     {
@@ -54,34 +55,84 @@ namespace CityExplorer.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(Activity Activity)
+        public async Task<ActionResult> Post(Activity activity, string cityName = null)
         {
             try
             {
-                var existing = await repository.GetActivityAsync(Activity.ActivityId);
+                var existing = await repository.GetActivityAsync(activity.Name);
                 if (existing != null)
                 {
                     return BadRequest("Activity name already in use!");
                 }
 
-                var newPath = linkGenerator.GetPathByAction("Get",
+                repository.Add(activity);
+
+                if (cityName == null)
+                {
+                    var newPath = linkGenerator.GetPathByAction("Get",
                     "Activities",
-                    new { name = Activity.Name });
+                    new { name = activity.Name });
 
-                if (string.IsNullOrWhiteSpace(newPath))
-                {
-                    return BadRequest("Could not use activity name!");
+                    if (string.IsNullOrWhiteSpace(newPath))
+                    {
+                        return BadRequest("Could not use activity name!");
+                    }
+
+                    if (await repository.SaveChangesAsync())
+                    {
+                        var newActivity = await repository.GetActivityAsync(activity.ActivityId);
+                        return Created(newPath, newActivity);
+                    }
+                    else
+                    {
+                        return BadRequest("Failed to save new venue!");
+                    }
                 }
-
-                repository.Add(Activity);
-
-                if (await repository.SaveChangesAsync())
+                else
                 {
-                    var newActivity = await repository.GetActivityAsync(Activity.ActivityId);
-                    return Created(newPath, newActivity);
-                }
+                    if (await repository.SaveChangesAsync())
+                    {
+                        var newActivitySaved = await repository.GetActivityAsync(activity.Name);
 
-                return Ok();
+                        var city = await repository.GetCityAsync(cityName);
+                        if (city == null)
+                        {
+                            return BadRequest("City name does not exist!");
+                        }
+
+                        ActivityCity activityCity = new ActivityCity()
+                        {
+                            ActivityId = newActivitySaved.ActivityId,
+                            CityId = city.CityId,
+                            Activity = newActivitySaved,
+                            City = city
+                        };
+
+                        activity.ActivityCities.Add(activityCity);
+                        newActivitySaved.ActivityCities.Add(activityCity);
+
+                        if (await repository.SaveChangesAsync())
+                        {
+                            var url = linkGenerator.GetPathByAction(HttpContext,
+                               "Get",
+                               values: new
+                               {
+                                   cityName = city.Name,
+                                   name = newActivitySaved.Name,
+                               });
+
+                            return Created(url, newActivitySaved);
+                        }
+                        else
+                        {
+                            return BadRequest("Failed to save new activity!");
+                        }
+                    }
+                    else
+                    {
+                        return BadRequest("Failed to save new activity!");
+                    }
+                }
             }
             catch (Exception)
             {

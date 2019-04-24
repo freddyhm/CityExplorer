@@ -31,6 +31,13 @@ namespace CityExplorer.Data
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task<City> GetCityAsync(string cityName)
+        {
+            IQueryable<City> query = context.Cities.Where(c => c.Name == cityName);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
         public void Add<T>(T entity) where T : class
         {
             context.Add(entity);
