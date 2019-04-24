@@ -27,6 +27,7 @@ namespace CityExplorer.Data
         public async Task<City> GetCityAsync(int cityId)
         {
             IQueryable<City> query = context.Cities.Where(c => c.CityId == cityId);
+
             return await query.FirstOrDefaultAsync();
         }
 
@@ -48,24 +49,42 @@ namespace CityExplorer.Data
         public async Task<Activity[]> GetAllActivitiesAsync()
         {
             IQueryable<Activity> query = context.Activities;
+
             return await query.ToArrayAsync();
+        }
+
+        public async Task<Activity> GetActivityAsync(int id)
+        {
+            IQueryable<Activity> query = context.Activities.Where(a => a.ActivityId == id);
+
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task<Activity> GetActivityAsync(string name)
         {
             IQueryable<Activity> query = context.Activities.Where(a => a.Name == name);
+
             return await query.FirstOrDefaultAsync();
         }
 
         public async Task<Venue[]> GetAllVenuesAsync()
         {
             IQueryable<Venue> query = context.Venues;
+
             return await query.ToArrayAsync();
+        }
+
+        public async Task<Venue> GetVenueAsync(int id)
+        {
+            IQueryable<Venue> query = context.Venues.Where(v => v.VenueId == id);
+
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task<Venue> GetVenueAsync(string name)
         {
             IQueryable<Venue> query = context.Venues.Where(v => v.Name == name);
+
             return await query.FirstOrDefaultAsync();
         }
     }

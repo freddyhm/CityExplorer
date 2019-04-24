@@ -20,11 +20,13 @@ namespace CityExplorer.Data
 
         // Activities
         Task<Activity[]> GetAllActivitiesAsync();
-        Task<Activity> GetActivityAsync();
+        Task<Activity> GetActivityAsync(string name);
+        Task<Activity> GetActivityAsync(int id);
 
         // Venues
         Task<Venue[]> GetAllVenuesAsync();
-        Task<Venue> GetVenueAsync();
+        Task<Venue> GetVenueAsync(string name);
+        Task<Venue> GetVenueAsync(int id);
 
     }
 }

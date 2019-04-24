@@ -13,6 +13,6 @@ namespace CityExplorer.Data.Entities
         public string Type { get; set; }
         public string Address { get; set; }
         public int Affordability { get; set; }
-        public ICollection<ActivityVenue> ActivityVenues { get; set; }
+        public ICollection<ActivityVenue> ActivityVenues { get; set; } = new List<ActivityVenue> { };
     }
 }
